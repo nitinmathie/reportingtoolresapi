@@ -1,1 +1,1 @@
-web: gunicorn superrestapi.wsgi
+web: gunicorn superrestapp.wsgi
