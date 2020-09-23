@@ -132,8 +132,8 @@ def userlogin_view(request):
             password = password.encode('utf-8')    
             x = bcrypt.checkpw( password, pwd)
             data['isSuccesful']=x 
-            userResponse['email'] =user.email
-            userResponse['firstname'] =user.firstName
+            userResponse['email'] =user.user_email
+            userResponse['firstname'] =user.username
             #userResponse['projects']=user.userProjects
             #userResponse['organizations']=user.userOrganizations
             data['user'] = userResponse
