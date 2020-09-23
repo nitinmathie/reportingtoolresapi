@@ -3,9 +3,9 @@ from django.core.validators import MinLengthValidator
 
 class User(models.Model):
     user_id = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=100, null=True, blank=True, validators=[MinLengthValidator(11)])
+    username = models.CharField(max_length=100, null=True, blank=True, validators=[MinLengthValidator(5)])
     user_email = models.EmailField(max_length=254, null=True, blank=True)
-    password = models.CharField(max_length=100, null=True, blank=True, validators=[MinLengthValidator(11)])
+    password = models.CharField(max_length=100, null=True, blank=True, validators=[MinLengthValidator(8)])
 
 class User_Profile(models.Model):
     user_profile_id = models.AutoField(primary_key =True)

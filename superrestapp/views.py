@@ -36,8 +36,8 @@ def userregistration_view(request):
                 user = serializer.save()
                 #bcrypt.checkpw(password,pwdhash)
                 data['response'] = "Successfully registered new user."
-                data['email'] = user.email
-                data['username'] = user.firstName
+                data['user_email'] = user.user_email
+                data['username'] = user.username
         else:
             data['username'] = request.data['password']
             #data = serializer.errors
