@@ -27,17 +27,22 @@ def userregistration_view(request):
         request.data['password']=pwdhash.decode('utf-8')
         serializer = UserSerializer(data=request.data)
         data = {}
+        userResponse ={}
         if serializer.is_valid():
             username = request.data['username']
             usercount = User.objects.filter(username=username).count()
             if usercount>=1:
                 return Response(request.data['username']+' exists' + ' Choose another username')
-            else:                
+            else:
+
                 user = serializer.save()
                 #bcrypt.checkpw(password,pwdhash)
-                data['response'] = "Successfully registered new user."
-                data['user_email'] = user.user_email
-                data['username'] = user.username
+                data['isSuccesful']=True 
+                userResponse['email'] =user.user_email
+                userResponse['firstname'] =user.username
+                #userResponse['projects']=user.userProjects
+                #userResponse['organizations']=user.userOrganizations
+                data['user'] = userResponse
         else:
             data['username'] = request.data['password']
             #data = serializer.errors
