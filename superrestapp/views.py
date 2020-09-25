@@ -20,6 +20,7 @@ import json
 #user registration
 @api_view(["POST"])
 def userregistration_view(request):
+    #Pending: when the registration fails the userprofile if created has to be deleted.
     if request.method == 'POST':
         password= request.data['password'].encode('utf-8')
         pwdhash= bcrypt.hashpw(password, bcrypt.gensalt())
@@ -37,7 +38,7 @@ def userregistration_view(request):
 
                 user = serializer.save()
                 #bcrypt.checkpw(password,pwdhash)
-                data['isSuccesful']=True 
+                data['isSuccessful']=True 
                 userResponse['email'] =user.user_email
                 userResponse['firstname'] =user.username
                 #userResponse['projects']=user.userProjects
@@ -136,7 +137,7 @@ def userlogin_view(request):
             pwd = user.password.encode('utf-8')
             password = password.encode('utf-8')    
             x = bcrypt.checkpw( password, pwd)
-            data['isSuccesful']=x 
+            data['isSuccessful']=x 
             userResponse['email'] =user.user_email
             userResponse['firstname'] =user.username
             #userResponse['projects']=user.userProjects
