@@ -130,6 +130,7 @@ def otpgenerator():
 @api_view(["POST"])
 def userlogin_view(request):
     if request.method == 'POST':
+        request.POST._mutable = True
         username = request.data['username']
         password = request.data['password']
         user = User.objects.get(username=username)
@@ -145,6 +146,7 @@ def userlogin_view(request):
             #userResponse['projects']=user.userProjects
             #userResponse['organizations']=user.userOrganizations
             data['user'] = userResponse
+            request.POST._mutable = False
         except:
             return Response("Error")
         return JsonResponse(data, safe=False)
