@@ -8,6 +8,7 @@ from superrestapp.models import *
 from superrestapp.serializers import *
 from rest_framework.decorators import api_view
 
+from django.http import HttpResponse
 
 import bcrypt
 from random import randint
@@ -126,6 +127,14 @@ def otpgenerator():
     #email= request.data['email']
     otp = randint(999,10000)        
     return otp
+def get_allusers(request):
+    kept = []
+    student_list = User.objects.all()
+    for student in student_list:
+        kept.append(student.username)
+    #your_list_as_json = json.dumps(kept)
+    return HttpResponse(kept)   
+        
 #user login
 @api_view(["POST"])
 def userlogin_view(request):
