@@ -22,7 +22,7 @@ import json
 def userregistration_view(request):
     #Pending: when the registration fails the userprofile if created has to be deleted.
     if request.method == 'POST':
-        request.data._mutable = True
+        request.POST._mutable = True
         password= request.data['password'].encode('utf-8')
         pwdhash= bcrypt.hashpw(password, bcrypt.gensalt())
         #pwdhashencode = pwdhash.encode('utf-8')
@@ -47,7 +47,7 @@ def userregistration_view(request):
                 data['user'] = userResponse
         else:
             data['username'] = request.data['password']
-            request.data._mutable = False
+            request.POST._mutable = False
             #data = serializer.errors
         return Response(data)
 #generate otp and send otp
