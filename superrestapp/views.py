@@ -169,13 +169,21 @@ def get_organizations_view(request):
     if request.method =='POST':
         user = request.data['username']
         data ={}
-        #org={}
+        org=[]
         organization = {}
         data['isSuccessful']=True
         data['user'] = "user"
         data['userRole'] = "Admin"
+        
         organization['organization_name'] ="Hello"
         organization['organization_id'] =1
-        #data['organization'] = organization
+        data['organization'] =organization
         return Response(data)
+# Get Organizations based on username.
+# display organizations as teams in Dream11.
+# display create organization button.
+# display form to gather organization information.
+# select organization navigate to create project and add user
+# Create an activity with toptab navigator - one displaying recycled view of projects, one displaying recycled  view of user
+# form to add user, form to add project.
 
