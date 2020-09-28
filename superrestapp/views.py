@@ -23,7 +23,7 @@ import json
 def userregistration_view(request):
     #Pending: when the registration fails the userprofile if created has to be deleted.
     if request.method == 'POST':
-        request.POST._mutable = True
+       # request.POST._mutable = True
         password= request.data['password'].encode('utf-8')
         pwdhash= bcrypt.hashpw(password, bcrypt.gensalt())
         #pwdhashencode = pwdhash.encode('utf-8')
@@ -48,7 +48,7 @@ def userregistration_view(request):
                 data['user'] = userResponse
         else:
             data['username'] = request.data['password']
-            request.POST._mutable = False
+        #    request.POST._mutable = False
             #data = serializer.errors
         return Response(data)
 #generate otp and send otp
@@ -159,3 +159,22 @@ def userlogin_view(request):
         except:
             return Response("Error")
         return JsonResponse(data, safe=False)
+# Add Organization
+#will add it
+# Add Organization Profile
+
+#Get Organization
+@api_view(["GET"])
+def get_organizations_view(request):
+    if request.method =='GET':
+        user = request.data['username']
+        data ={}
+        organization = {}
+        data['isSuccessful']=True
+        data['user'] = "user"
+        data['userRole'] = "Admin"
+        organization['organization_name'] ="Hello"
+        organization['organization_id'] =1
+        data['organization'] = organization
+        return Response(data)
+
