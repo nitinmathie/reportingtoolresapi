@@ -169,12 +169,13 @@ def get_organizations_view(request):
     if request.method =='POST':
         user = request.data['username']
         data ={}
+        #org={}
         organization = {}
         data['isSuccessful']=True
         data['user'] = "user"
         data['userRole'] = "Admin"
         organization['organization_name'] ="Hello"
         organization['organization_id'] =1
-        data['organization'] = organization
+        #data['organization'] = organization
         return Response(data)
 
