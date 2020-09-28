@@ -164,9 +164,9 @@ def userlogin_view(request):
 # Add Organization Profile
 
 #Get Organization
-@api_view(["GET"])
+@api_view(["POST"])
 def get_organizations_view(request):
-    if request.method =='GET':
+    if request.method =='POST':
         user = request.data['username']
         data ={}
         organization = {}
