@@ -177,7 +177,9 @@ def get_organizations_view(request):
         
         organization['organization_name'] ="Hello"
         organization['organization_id'] =1
-        data['organization'] =organization
+        org.append(organization)
+        data['organization'] =org
+        
         return Response(data)
 # Get Organizations based on username.
 # display organizations as teams in Dream11.
