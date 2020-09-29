@@ -7,9 +7,24 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class OrganizationSerializer(serializers.ModelSerializer): 
+   # organization_created_by = UserSerializer(read_only=True, many=False)
+   # organization_updated_by = UserSerializer(read_only=True, many=False)
+    organization_users = UserSerializer(read_only=True, many=True)
     class Meta:
-        model = Organization
-        fields = '__all__'
+        model = Organization        
+        fields = (
+             'organization_id',
+          'organization_name',
+          'organization_email',
+          'organization_address',
+          'organization_logo' ,
+          'organization_created_by' ,
+          'organization_updated_by' ,
+          'organization_created_on' ,
+          'organization_updated_on' ,
+           'organization_status',
+           'organization_users'          
+        )
       
         
 class ProjectSerializer(serializers.ModelSerializer): 

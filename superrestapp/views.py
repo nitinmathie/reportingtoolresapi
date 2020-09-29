@@ -17,7 +17,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import os
 import json
-
 #user registration
 @api_view(["POST"])
 def userregistration_view(request):
@@ -171,52 +170,41 @@ def add_organization_view(request):
         organization_name = request.data['organization_name']
         organization_email = request.data['organization_email']
         organization_address = request.data['organization_location']
-        organization_created_by = request.data['organization_location']
-        organization_updated_by = request.data['organization_location']
+        #organization_created_by = request.data['organization_location']
+        #organization_updated_by = request.data['organization_location']
         user = User.objects.get(username=username)
-        organization_created_by = user.user_id
-        organization_updated_by = user.user_id
-        users=[]
-        users.append(organization_created_by)
-        res=[]
-        dat={}
-        dat["organization_name"] =organization_name
-        dat["organization_email"] =organization_email
-        dat["organization_created_by"] =user.user_id
-        dat["organization_updated_by"] =user.user_id
+        try:
+            organization_created_by = user.user_id
+            organization_updated_by = user.user_id
+            users=[]
+            users.append(organization_created_by)
+            res=[]
+            dat={}
+            dat["organization_name"] =organization_name
+            dat["organization_email"] =organization_email
+            dat["organization_created_by"] =user.user_id
+            dat["organization_updated_by"] =user.user_id
         
-        dat["organization_users"] =users        
-        serializer = OrganizationSerializer(data=dat)
-        if serializer.is_valid():
-            organization_name = request.data['organization_name']
-            orgcount = Organization.objects.filter(organization_name=organization_name).count()
-            if orgcount>=1:
-                return Response(request.data['organization_name']+' exists' + ' Choose another username')
-            else:
-                organization = serializer.save()                
+            dat["organization_users"] =users        
+            serializer = OrganizationSerializer(data=dat)
+            if serializer.is_valid():
+                organization_name = request.data['organization_name']
+                orgcount = Organization.objects.filter(organization_name=organization_name).count()
+                if orgcount>=1:
+                    return Response(request.data['organization_name']+' exists' + ' Choose another username')
+                else:
+                    organization = serializer.save()                
                 #bcrypt.checkpw(password,pwdhash)
-                dat['isSuccessful']=True 
-                dat['user'] =username
-                dat['userRole'] ="Admin"
-                dat['message'] ="Success"
-                user_organizations = Organization.objects.filter(organization_created_by=organization_created_by)
-                
-                userOrganizations = []
-                organization={}
-                for org in user_organizations:
-                    organization['organization_id']=org.organization_id
-                    organization['organization_name']=org.organization_name
-                    organization['created_at']=org.organization_created_at
-                    organization['created_by']=org.organization_created_by
-                    organization['updated_at']=org.organization_updated_at
-                    organization['updated_by']=org.organization_updated_by                    
-                    userOrganizations.append(organization)
-                dat['organization'] = userOrganizations    
-
-               
-        else:
-
-            dat['serializer error'] = serializer.errors
+                    dat['isSuccessful']=True 
+                    dat['user'] =username
+                    dat['userRole'] ="Admin"
+                    dat['message'] ="Success"
+                    
+        
+            else:
+                dat['serializer error'] = serializer.errors
+        except:
+            dat['error']  ="error"              
         #    request.POST._mutable = False
             #data = serializer.errors
         return Response(dat)
@@ -228,30 +216,21 @@ def get_organizations_view(request):
         username = request.data['username']
         user = User.objects.get(username=username)
         userid = user.user_id
-        data ={}
+        dat ={}
         org=[]
         organization = {}
-        user_organizations = Organization.objects.filter(organization_created_by=organization_created_by)
-        userOrganizations = []
-        organization={}
-        for org in user_organizations:
-            organization['organization_id']=org.organization_id
-            organization['organization_name']=org.organization_name
-            organization['created_at']=org.organization_created_at
-            organization['created_by']=org.organization_created_by
-            organization['updated_at']=org.organization_updated_at
-            organization['updated_by']=org.organization_updated_by                    
-            userOrganizations.append(organization)
-        dat['organization'] = userOrganizations            
+        user_organizations = Organization.objects.filter(organization_created_by=userid)
+        data = OrganizationSerializer(user_organizations, many=True).data 
+        dat['organization']=data              
         dat['isSuccessful']=True 
-        dat['user'] =username
+        dat['user'] =request.data['username']
         dat['userRole'] ="Admin"
         dat['message'] ="Success"             
     else:
         dat['serializer error'] = "some Error"
         #    request.POST._mutable = False
             #data = serializer.errors
-        return Response(dat)
+    return Response(dat)
 
 # Get Organizations based on username.
 # display organizations as teams in Dream11.
