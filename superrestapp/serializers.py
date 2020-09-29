@@ -10,6 +10,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
         fields = '__all__'
+      
         
 class ProjectSerializer(serializers.ModelSerializer): 
     class Meta:

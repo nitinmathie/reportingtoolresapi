@@ -165,6 +165,64 @@ def userlogin_view(request):
 
 #Get Organization
 @api_view(["POST"])
+def add_organization_view(request):
+    if request.method=='POST':
+        username = request.data['username']
+        organization_name = request.data['organization_name']
+        organization_email = request.data['organization_email']
+        organization_address = request.data['organization_location']
+        organization_created_by = request.data['organization_location']
+        organization_updated_by = request.data['organization_location']
+        user = User.objects.get(username=username)
+        organization_created_by = user.user_id
+        organization_updated_by = user.user_id
+        users=[]
+        users.append(organization_created_by)
+        res=[]
+        dat={}
+        dat["organization_name"] =organization_name
+        dat["organization_email"] =organization_email
+        dat["organization_created_by"] =user.user_id
+        dat["organization_updated_by"] =user.user_id
+        
+        dat["organization_users"] =users        
+        serializer = OrganizationSerializer(data=dat)
+        if serializer.is_valid():
+            organization_name = request.data['organization_name']
+            orgcount = Organization.objects.filter(organization_name=organization_name).count()
+            if orgcount>=1:
+                return Response(request.data['organization_name']+' exists' + ' Choose another username')
+            else:
+                organization = serializer.save()                
+                #bcrypt.checkpw(password,pwdhash)
+                dat['isSuccessful']=True 
+                dat['user'] =username
+                dat['userRole'] ="Admin"
+                dat['message'] ="Success"
+                user_organizations = Organization.objects.filter(organization_created_by=organization_created_by)
+                
+                userOrganizations = []
+                organization={}
+                for org in user_organizations:
+                    organization['organization_id']=org.organization_name
+                    organization['organization_name']=org.organization_name
+                    organization['created_at']=org.organization_name
+                    organization['created_by']=org.organization_name
+                    organization['updated_at']=org.organization_name
+                    organization['updated_by']=org.organization_name                    
+                    userOrganizations.append(organization)
+                dat['organization'] = userOrganizations    
+
+               
+        else:
+
+            dat['serializer error'] = serializer.errors
+        #    request.POST._mutable = False
+            #data = serializer.errors
+        return Response(dat)
+
+
+@api_view(["POST"])
 def get_organizations_view(request):
     if request.method =='POST':
         user = request.data['username']

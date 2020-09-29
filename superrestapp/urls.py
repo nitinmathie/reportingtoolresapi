@@ -2,7 +2,8 @@
 from .views import *
 from rest_framework import routers
 from django.urls import path
-from .views import (userregistration_view,  gensend_otp, verify_otp, userlogin_view,get_allusers, get_organizations_view)
+from .views import (userregistration_view,  gensend_otp, verify_otp, userlogin_view,get_allusers, get_organizations_view,
+add_organization_view)
 
 app_name= ""
 urlpatterns = [
@@ -11,7 +12,8 @@ path('sendotp',gensend_otp,name='sendotp'),
 path('verifyotp',verify_otp,name='verifyotp'),
 path('login',userlogin_view,name='login'),
 path('getall',get_allusers, name='getall'),
-path('getorganizations',get_organizations_view, name='getorganizations')
+path('getorganizations',get_organizations_view, name='getorganizations'),
+path('addorganization',add_organization_view, name='addorganization')
 ]
 
 
