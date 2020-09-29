@@ -204,12 +204,12 @@ def add_organization_view(request):
                 userOrganizations = []
                 organization={}
                 for org in user_organizations:
-                    organization['organization_id']=org.organization_name
+                    organization['organization_id']=org.organization_id
                     organization['organization_name']=org.organization_name
-                    organization['created_at']=org.organization_name
-                    organization['created_by']=org.organization_name
-                    organization['updated_at']=org.organization_name
-                    organization['updated_by']=org.organization_name                    
+                    organization['created_at']=org.organization_created_at
+                    organization['created_by']=org.organization_created_by
+                    organization['updated_at']=org.organization_updated_at
+                    organization['updated_by']=org.organization_updated_by                    
                     userOrganizations.append(organization)
                 dat['organization'] = userOrganizations    
 
@@ -225,23 +225,34 @@ def add_organization_view(request):
 @api_view(["POST"])
 def get_organizations_view(request):
     if request.method =='POST':
-        user = request.data['username']
+        username = request.data['username']
+        user = User.objects.get(username=username)
+        userid = user.user_id
         data ={}
         org=[]
         organization = {}
-        data['isSuccessful']=True
-        data['user'] = "user"
-        data['userRole'] = "Admin"
-        
-        organization['organization_name'] ="Hello"
-        organization['organization_id'] =1
-        org.append(organization)
-        organization['organization_name'] ="Hello1"
-        organization['organization_id'] =2
-        org.append(organization)
-        data['organization'] =org
-        
-        return Response(data)
+        user_organizations = Organization.objects.filter(organization_created_by=organization_created_by)
+        userOrganizations = []
+        organization={}
+        for org in user_organizations:
+            organization['organization_id']=org.organization_id
+            organization['organization_name']=org.organization_name
+            organization['created_at']=org.organization_created_at
+            organization['created_by']=org.organization_created_by
+            organization['updated_at']=org.organization_updated_at
+            organization['updated_by']=org.organization_updated_by                    
+            userOrganizations.append(organization)
+        dat['organization'] = userOrganizations            
+        dat['isSuccessful']=True 
+        dat['user'] =username
+        dat['userRole'] ="Admin"
+        dat['message'] ="Success"             
+    else:
+        dat['serializer error'] = "some Error"
+        #    request.POST._mutable = False
+            #data = serializer.errors
+        return Response(dat)
+
 # Get Organizations based on username.
 # display organizations as teams in Dream11.
 # display create organization button.
