@@ -170,7 +170,7 @@ def userlogin_view(request):
 def add_organization_view(request):
     if request.method=='POST':
         username = request.data['username']
-        organization_name = request.data['organization_name']
+        organization_name = request.data['c']
         organization_email = request.data['organization_email']
         organization_address = request.data['organization_location']
         #organization_created_by = request.data['organization_location']
@@ -216,8 +216,9 @@ def add_organization_view(request):
                 organization_result['message'] ="Success"
 
         except:
-            dat={}
-            dat['error']  ="error"              
+            organization_result={}
+            organization_result['error']  ="error"      
+
         #    request.POST._mutable = False
             #data = serializer.errors
         return Response(organization_result)
@@ -262,7 +263,9 @@ def add_project_view(request):
         username = request.data['username']
         user = User.objects.get(username=username)
         project_name=request.data['project_name']
-        organization_project_id=request.data['organization_id']
+        organization_name=request.data['organization_name']
+        organization = Organization.objects.get(organization_name=organization_name)
+        organization_project_id=organization.organization_id
         project_type = request.data['project_type'] # choices field with all the construction fields available    
         project_location = request.data['project_location']        
         project_description = request.data['project_description']
@@ -313,7 +316,7 @@ def get_projects_view(request):
         project = {}
         usrs=[]
         proj=[]
-        for pro in projects.all():
+        for pro in projects:
             project={}           
             u = pro.project_users.all()
             project['projectid'] = pro.project_id
@@ -388,7 +391,7 @@ def get_stores_view(request):
         store = {}
         usrs=[]
         stor=[]
-        for pro in stores.all():
+        for pro in stores:
             store={}           
             u = pro.store_users.all()
             store['storeid'] = pro.store_id
@@ -413,7 +416,7 @@ def get_users_view(request):
         #user = User.objects.get(username=username)
         #userid = user.user_id
         organization = Organization.objects.get(organization_name=organization_name)
-        organization_id=organization.organization_id
+        organization_id = organization.organization_id
         #organization = Organization.objects.filter(organization_id=organization_id)
         organizationusers= organization.organization_users
         dat ={}        
@@ -446,9 +449,7 @@ def add_user_view(request):
         project = Project.objects.get(project_name=project_name)
         project_id= project.project_id
         organization = Organization.objects.get(organization_name=organization_name)
-        organization_id= organization.organization_id        
-        
-        
+        organization_id= organization.organization_id                        
         user_role = request.data['user_role'] # choices field with all the construction fields available    
         first_name = request.data['first_name']        
         last_name = request.data['last_name']
@@ -474,7 +475,7 @@ def add_user_view(request):
             savedUserRole = createUserRole.save()
             userRole = User_Role.objects.get(user_id=user_id, organization_id=organization_id,
             project_id= project_id)
-
+            organization = Organization.objects.get(organization_name=organization_name)
             usr ={}
             usr["user_id"]= user_id
             usr["username"]=username
