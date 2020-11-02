@@ -67,6 +67,10 @@ class UserProjectRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = User_Role
         fields = '__all__'
+class PlanSerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = Plan
+        fields = '__all__'        
 class OtpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Otp

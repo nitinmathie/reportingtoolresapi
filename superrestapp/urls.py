@@ -20,6 +20,7 @@ path('addstore',add_store_view, name='addstore'),
 path('getstores',get_stores_view, name='getstores'),
 path('getusers',get_users_view, name='getusers'),
 path('adduser',add_user_view, name='adduser'),
+path('addplan',add_project_plan, name='addplan'),
 ]
 
 

@@ -266,7 +266,7 @@ def add_project_view(request):
         organization_name=request.data['organization_name']
         organization = Organization.objects.get(organization_name=organization_name)
         organization_project_id=organization.organization_id
-        project_type = request.data['project_type'] # choices field with all the construction fields available    
+        project_type = request.data['project_type'] 
         project_location = request.data['project_location']        
         project_description = request.data['project_description']
         project_created_by = user.user_id
@@ -484,3 +484,40 @@ def add_user_view(request):
             usr["project_id"]=  project_id 
             usr['isSuccessful']=True                                                 
         return Response(usr)
+
+#Add Plan        
+@api_view(["POST"])
+def add_project_plan(request):
+    if request.method=='POST':
+        project_result={}
+        username = request.data['username']
+        user = User.objects.get(username=username)
+        project_name=request.data['project_name']
+        project = Project.objects.get(project_name=project_name)
+        plan_project_id=project.project_id        
+        organization_name=request.data['organization_name']
+        organization = Organization.objects.get(organization_name=organization_name)
+        plan_organization_id=organization.organization_id
+        plan_name = request.data['plan_name']
+       # plan_type = request.data['plan_type']   
+        #plan_location = request.data['plan_location']        
+        plan_description = request.data['plan_description']
+        plan_created_by = user.user_id
+        plan_updated_by = user.user_id
+        createPlan= Plan.objects.create(plan_name=plan_name, plan_organization_id_id =plan_organization_id, plan_project_id_id = plan_project_id,
+        plan_description=plan_description, plan_created_by_id=plan_created_by,plan_updated_by_id=plan_updated_by)
+       
+        planCount = Plan.objects.filter(plan_name=plan_name).count()
+        if planCount>=2:
+            return Response(request.data['plan_name']+' exists' + ' Choose another username')
+        else:
+            savedPlan = createPlan.save()     
+            plans = Plan.objects.get(plan_name=plan_name)
+            serializer = PlanSerializer(plans, many=False)                
+            project_result['plan'] = serializer.data
+            dat={}
+            project_result['isSuccessful']=True 
+            project_result['user'] =username
+            project_result['userRole'] ="Admin"
+            project_result['message'] ="Success"                          
+        return Response(project_result)
