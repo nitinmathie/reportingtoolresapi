@@ -60,7 +60,6 @@ class StoreSerializer(serializers.ModelSerializer):
     'updated_on',
     'store_updated_by',
     'store_users'
-
         )
 
 class UserProjectRoleSerializer(serializers.ModelSerializer):    
@@ -71,6 +70,35 @@ class PlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plan
         fields = '__all__'        
+class TaskSerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = Task
+        fields = '__all__'  
+
+class CCBreakingActivitySerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = CCBreakingActivity
+        fields = '__all__'   
+class PipeLineActivitySerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = PipeLineActivity
+        fields = '__all__'   
+class ManholeActivitySerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = ManholeActivity
+        fields = '__all__'   
+class RoadRestorationActivitySerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = RoadRestorationActivity
+        fields = '__all__'   
+class HSCActivitySerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = HSCActivity
+        fields = '__all__' 
+class HouseKeepingActivitySerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = HouseKeepingActivity
+        fields = '__all__'                                                                
 class OtpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Otp
