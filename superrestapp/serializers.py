@@ -98,7 +98,11 @@ class HSCActivitySerializer(serializers.ModelSerializer):
 class HouseKeepingActivitySerializer(serializers.ModelSerializer):    
     class Meta:
         model = HouseKeepingActivity
-        fields = '__all__'                                                                
+        fields = '__all__' 
+class AssignActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AssignActivity
+        fields = '__all__'                                                                       
 class OtpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Otp

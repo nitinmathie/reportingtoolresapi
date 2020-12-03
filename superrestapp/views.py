@@ -553,7 +553,7 @@ def get_project_plans(request):
 #add task and activity
 @api_view(["POST"])
 def add_task(request):
-    if request.method=='POST':  
+    if request.method=='POST':          
         activity_result={}      
         username = request.data['username']
         user = User.objects.get(username=username)
@@ -583,36 +583,32 @@ def add_task(request):
             return Response(request.data['task_name']+' exists' + ' Choose another name for task')
         else:
             savedTask = createTask.save()                 
-        task = Task.objects.get(task_name=task_name)            
-        task_id = task.task_id                    
-        ccbreaking_activity_name = "CCBreaking" + str(task_id)
-        ccb_pipeline_trench_500_status = "0"
-        ccb_mharea_status = "0"
-        ccb_upvc_350= "0"
-        ccb_IC_500 = "0"
-        createActivity= CCBreakingActivity.objects.create(
+            task = Task.objects.get(task_name=task_name)            
+            task_id = task.task_id                    
+            ccbreaking_activity_name = "CCBreaking" + str(task_id)
+            ccb_pipeline_trench_500_status = "0"
+            ccb_mharea_status = "0"
+            ccb_upvc_350= "0"
+            ccb_IC_500 = "0"
+            createActivity= CCBreakingActivity.objects.create(
                                 cc_task_id_id = task_id,
                                 ccbreaking_activity_name=ccbreaking_activity_name,
                                 ccb_pipeline_trench_500_status =ccb_pipeline_trench_500_status, 
                                 ccb_mharea_status = ccb_mharea_status,
                                 ccb_upvc_350 = ccb_upvc_350,
                                 ccb_IC_500 = ccb_IC_500) 
-        actCount = CCBreakingActivity.objects.filter(ccbreaking_activity_name=ccbreaking_activity_name).count()
-        if actCount>=2:
-            return Response(request.data['ccbreaking_activity_name']+' exists' + ' Choose another name')
-        else:
-            savedActivity = createActivity.save()   
-            serializer = CCBreakingActivitySerializer(savedActivity, many=False)                                
+            savedActivity = createActivity.save()
+            fetch_saved_activity = CCBreakingActivity.objects.get(ccbreaking_activity_name= ccbreaking_activity_name )   
+            serializer = CCBreakingActivitySerializer(fetch_saved_activity, many=False)                                
             activity_result['ccb'] = serializer.data
-
-        task_id = task_id                
-        pipeline_activity_name = "Pipe"+str(task_id)
-        trenching_pipeline = "0"
-        bedding = "0"
-        laying= "0"
-        pipe_jointing = "0"
-        back_filling= "0"                                
-        createPipeActivity= PipeLineActivity.objects.create(
+            task_id = task_id                
+            pipeline_activity_name = "Pipe"+str(task_id)
+            trenching_pipeline = "0"
+            bedding = "0"
+            laying= "0"
+            pipe_jointing = "0"
+            back_filling= "0"                                
+            createPipeActivity= PipeLineActivity.objects.create(
                             pipe_task_id_id = task_id,
                                 pipeline_activity_name=pipeline_activity_name,
                                 trenching_pipeline =trenching_pipeline, 
@@ -621,25 +617,22 @@ def add_task(request):
                                 pipe_jointing = pipe_jointing,
                                 back_filling=back_filling
                                 ) 
-        actCount = PipeLineActivity.objects.filter(pipeline_activity_name=pipeline_activity_name).count()
-        if actCount>=2:
-            return Response(request.data['pipeline_activity_name']+' exists' + ' Choose another name')
-        else:
             savedPipedActivity = createPipeActivity.save()     
-            serializer = PipeLineActivitySerializer(savedPipedActivity, many=False)                                          
+            fetch_saved_activity = PipeLineActivity.objects.get(pipeline_activity_name= pipeline_activity_name )               
+            serializer = PipeLineActivitySerializer(fetch_saved_activity, many=False)                                          
             activity_result['pipeactivity'] = serializer.data
-        manhole_activity_name = "MH " + str(task_id)            
-        excavation = "0"
-        removal_excess_soil = "0"
-        dust_fill_PCC_below = "0"
-        base_erection= "0"
-        pipe_mhbase_connection = "0"
-        haunching= "0"
-        raiser_erection = "0"
-        cone_erection= "0"
-        fix_UPVC = "0"
-        back_filling= "0"
-        createActivity= ManholeActivity.objects.create(
+            manhole_activity_name = "MH " + str(task_id)            
+            excavation = "0"
+            removal_excess_soil = "0"
+            dust_fill_PCC_below = "0"
+            base_erection= "0"
+            pipe_mhbase_connection = "0"
+            haunching= "0"
+            raiser_erection = "0"
+            cone_erection= "0"
+            fix_UPVC = "0"
+            back_filling= "0"
+            createActivity= ManholeActivity.objects.create(
                                 mh_task_id_id = task_id,
                                 manhole_activity_name = manhole_activity_name,
                                 excavation=excavation,
@@ -653,26 +646,20 @@ def add_task(request):
                                 fix_UPVC = fix_UPVC,
                                 back_filling = back_filling
                                 ) 
-        actCount = ManholeActivity.objects.filter(manhole_activity_name=manhole_activity_name).count()
-        if actCount>=2:
-            return Response(request.data['manhole_activity_name']+' exists' + ' Choose another name')
-        else:
             savedMHActivity = createActivity.save()     
-            serializer = ManholeActivitySerializer(savedMHActivity, many=False)                
+            fetch_saved_activity = ManholeActivity.objects.get(manhole_activity_name= manhole_activity_name )               
+            serializer = ManholeActivitySerializer(fetch_saved_activity, many=False)                
             activity_result['MHactivity'] = serializer.data
-                    
-                #break                
-
-        restoration_activity_name = "RoadRestoration"+ str(task_id )
-        fill_with_dust = "0"
-        fill_with_concrete = "0"
-        below_road_300= "0"
-        pcc_200_mh = "0"
-        pcc_200_pl= "0"
-        vcc_pl_200 = "0"
-        vcc_UPVC_200= "0"
-        vcc_IC_100 = "0"
-        createActivity= RoadRestorationActivity.objects.create(rr_task_id_id = task_id,
+            restoration_activity_name = "RoadRestoration"+ str(task_id )
+            fill_with_dust = "0"
+            fill_with_concrete = "0"
+            below_road_300= "0"
+            pcc_200_mh = "0"
+            pcc_200_pl= "0"
+            vcc_pl_200 = "0"
+            vcc_UPVC_200= "0"
+            vcc_IC_100 = "0"
+            createActivity= RoadRestorationActivity.objects.create(rr_task_id_id = task_id,
                                 restoration_activity_name = restoration_activity_name,
                                 fill_with_dust=fill_with_dust,
                                 fill_with_concrete =fill_with_concrete, 
@@ -683,20 +670,19 @@ def add_task(request):
                                 vcc_UPVC_200 =vcc_UPVC_200, 
                                 vcc_IC_100 = vcc_IC_100
                                 ) 
-        actCount = RoadRestorationActivity.objects.filter(restoration_activity_name=restoration_activity_name).count()
-        if actCount>=2:
-            return Response(request.data['restoration_activity_name']+' exists' + ' Choose another name')
-        else:
-            savedRRActivity = createActivity.save()     
-            serializer = RoadRestorationActivitySerializer(savedRRActivity, many=False)                
+            actCount = RoadRestorationActivity.objects.filter(restoration_activity_name=restoration_activity_name).count()
+            
+            savedRRActivity = createActivity.save() 
+            fetch_saved_activity = RoadRestorationActivity.objects.get(restoration_activity_name= restoration_activity_name )                 
+            serializer = RoadRestorationActivitySerializer(fetch_saved_activity, many=False)                
             activity_result['rractivity'] = serializer.data
                 #break                            
-        hsc_activity_name ="HSC" + str(task_id)
-        excavation_for_IC = "0"
-        PCC_below_IC = "0"
-        erection_IC= "0"
-        dust_filling = "0"
-        createActivity= HSCActivity.objects.create(
+            hsc_activity_name ="HSC" + str(task_id)
+            excavation_for_IC = "0"
+            PCC_below_IC = "0"
+            erection_IC= "0"
+            dust_filling = "0"
+            createActivity= HSCActivity.objects.create(
                                 hsc_activity_name = hsc_activity_name,
                                 hsc_task_id_id = task_id,
                                 excavation_for_IC=excavation_for_IC,
@@ -704,23 +690,18 @@ def add_task(request):
                                 erection_IC = erection_IC,
                                 dust_filling = dust_filling
                                 ) 
-        actCount = HSCActivity.objects.filter(hsc_activity_name=hsc_activity_name).count()
-        if actCount>=2:
-            return Response(request.data['hsc_activity_name']+' exists' + ' Choose another name')
-        else:
+            
             savedHscActivity = createActivity.save()     
-            serializer = HSCActivitySerializer(savedHscActivity, many=False)                
+            fetch_saved_activity = HSCActivity.objects.get(hsc_activity_name= hsc_activity_name )                                             
+            serializer = HSCActivitySerializer(fetch_saved_activity, many=False)            
             activity_result['hscactivity'] = serializer.data
-        housekeeping_activity_name = "HK"+str(task_id)
-        createActivity= HouseKeepingActivity.objects.create(hk_task_id_id = task_id,
+            housekeeping_activity_name = "HK"+str(task_id)
+            createActivity= HouseKeepingActivity.objects.create(hk_task_id_id = task_id,
                                 housekeeping_activity_name = housekeeping_activity_name                               
                                 ) 
-        actCount = HouseKeepingActivity.objects.filter(housekeeping_activity_name=housekeeping_activity_name).count()
-        if actCount>=2:
-            return Response(request.data['housekeeping_activity_name']+' exists' + ' Choose another name')
-        else:
             savedHKActivity = createActivity.save()     
-            serializer = HouseKeepingActivitySerializer(savedHKActivity, many=False)                            
+            fetch_saved_activity = HouseKeepingActivity.objects.get(housekeeping_activity_name= housekeeping_activity_name )              
+            serializer = HouseKeepingActivitySerializer(fetch_saved_activity, many=False)                            
             activity_result['hkactivity'] = serializer.data
         activity_result['taskid'] = task_id           
         return Response(activity_result)            
@@ -735,7 +716,7 @@ def assign_task_activity(request):
         username = request.data['username']
         user = User.objects.get(username=username)                
         task_id= request.data['task_id'] 
-        activity_type_id = request.data['activity_type_id'] 
+       # activity_type_id = request.data['activity_type_id'] 
         assigned_by = request.data['assigned_by'] 
         assigned_on = request.data['assigned_on'] 
         assigned_to = request.data['assigned_to'] 
@@ -756,11 +737,10 @@ def assign_task_activity(request):
         tractor_compressor_quantity = request.data['tractor_compressor_quantity'] 
         tractor_compressor_hours =  request.data['tractor_compressor_hours'] 
         other_machine_quantity = request.data['other_machine_quantity'] 
-        other_machine_hours = request.data['other_machine_hours'] 
-        
+        other_machine_hours = request.data['other_machine_hours']         
         assignActivity= AssignActivity.objects.create(
                     assign_task_id_id= task_id,
-        activity_type_id =  activity_type_id,
+        #activity_type_id =  activity_type_id,
         assigned_by = user.user_id,
         assigned_on = assigned_on,
         assigned_to = assignto.user_id, 
@@ -783,12 +763,13 @@ def assign_task_activity(request):
         other_machine_hours = other_machine_hours
            )       
         assignCount = AssignActivity.objects.filter(assign_task_id_id=task_id).count()
+        project_result={}
         if assignCount>=2:
             return Response('The task has already assigned')
+            project_result['resp'] = "already assigned"
         else:
-            project_restult={}
             savedAssignActivity = assignActivity.save()     
-            activities = savedAssignActivity.objects.get(task_id=task_id)
+            activities = AssignActivity.objects.get(assign_task_id_id=task_id)
             serializer = AssignActivitySerializer(activities, many=False)                
             project_result['assigned_activity'] = serializer.data            
             project_result['isSuccessful']=True 
@@ -803,7 +784,7 @@ def report_task_activity(request):
         username = request.data['username']
         user = User.objects.get(username=username)                
         task_id= request.data['task_id'] 
-        activity_type_id = request.data['activity_type_id'] 
+        activity_id = request.data['activity_name']
         assigned_by = request.data['assigned_by'] 
         assigned_on = request.data['assigned_on'] 
         assigned_to = request.data['assigned_to'] 
@@ -859,127 +840,99 @@ def report_task_activity(request):
             savedReportActivity = reportActivity.save()     
             activities = savedReportActivity.objects.get(task_id=task_id)
             serializer = Report_ActivitySerializer(activities, many=False)                
-            if task_type == "CC":
-                task_id = task_id
-                update_cc = CCBreakingActivity.objects.get(task_id=task_id)
-                update_cc.status=request.data['status'] 
-                update_cc.completed_on=request.data['completed_on'] 
-                updated_activity = update_cc.save()
-                serializer = CCBreakingActivitySerializer(updated_activity, many=False)                
-                activity_result={}
-                activity_result['plan'] = serializer.data
-                activity_result['isSuccessful']=True 
-                activity_result['user'] =username
-                activity_result['userRole'] ="Admin"
-                activity_result['message'] ="Success"                          
-                return Response(activity_result)
-                #sbreak
-                
-            if task_type == "Pipe":
-                task_id = task_id                
-                update_pipe = PipeLineActivity.objects.get(task_id=task_id)
-                update_pipe.status=request.data['status'] 
-                update_pipe.completed_on=request.data['completed_on'] 
-                updated_activity = update_pipe.save()
-                serializer = PipeLineActivitySerializer(updated_activity, many=False)                
-                activity_result={}
-                activity_result['pipe'] = serializer.data
-                activity_result['isSuccessful']=True 
-                activity_result['user'] =username
-                activity_result['userRole'] ="Admin"
-                activity_result['message'] ="Success"                          
-                return Response(activity_result)
+        get_cc = CCBreakingActivity.objects.filter(ccbreaking_activity_name=activity_id)
+        if get_cc.exists():
+            get_cc = CCBreakingActivity.objects.get(ccbreaking_activity_name=activity_id)
+            get_cc.status=request.data['status'] 
+            get_cc.completed_on=request.data['completed_on'] 
+            updated_activity = get_cc.save()
+            serializer = CCBreakingActivitySerializer(updated_activity, many=False)                
+            activity_info['task_id']=task_id
+            activity_info['activity'] =serializer.data    
+            return Response(activity_info)
+        get_pipe = PipeLineActivity.objects.filter(pipeline_activity_name=activity_id)
+        if get_pipe.exists():
+            get_pipe = PipeLineActivity.objects.get(pipeline_activity_name=activity_id)            
+            get_pipe.status=request.data['status']
+            get_pipe.completed_on=request.data['completed_on']
+            updated_activity = get_pipe.save()
+            serializer = PipeLineActivitySerializer(get_pipe, many=False)                
+            activity_info['task_id']=task_id
+            activity_info['activity'] =serializer.data    
+            return Response(activity_info)
+        get_mh = ManholeActivity.objects.filter(manhole_activity_name=activity_id)
+        if get_mh.exists():
+            get_mh = ManholeActivity.objects.get(manhole_activity_name=activity_id)
+            get_mh.status=request.data['status']
+            get_mh.completed_on=request.data['completed_on']
+            updated_activity = get_mh.save()            
+            serializer = ManholeActivitySerializer(updated_activity, many=False)                
+            activity_info['task_id']=task_id
+            activity_info['activity'] =serializer.data    
+            return Response(activity_info)
+        get_rr = RoadRestorationActivity.objects.filter(rr_activity_name=activity_id)
+        if get_rr.exists():
+            get_rr = RoadRestorationActivity.objects.get(rr_activity_name=activity_id)
+            get_rr.status=request.data['status']
+            get_rr.completed_on=request.data['completed_on']
+            updated_activity = get_rr.save()                        
+            serializer = RoadRestorationActivitySerializer(updated_activity, many=False)                
+            activity_info['task_id']=task_id
+            activity_info['activity'] =serializer.data    
+            return Response(activity_info)
+        get_hsc = HSCActivity.objects.filter(hsc_activity_name=activity_id)
+        if get_hsc.exists():        
+            get_hsc = HSCActivity.objects.get(hsc_activity_name=activity_id)            
+            get_hsc.status=request.data['status']
+            get_hsc.completed_on=request.data['completed_on']
+            updated_activity = get_hsc.save()                  
+            serializer = HSCActivitySerializer(updated_activity, many=False)                
+            activity_info['task_id']=task_id
+            activity_info['activity'] =serializer.data    
+            return Response(activity_info)
+        get_hk = HKActivity.objects.filter(hk_activity_name=activity_id)
+        if get_hk.exists():
+            get_hk = HKActivity.objects.get(hk_activity_name=activity_id)
+            get_hk.status=request.data['status']
+            get_hk.completed_on=request.data['completed_on']
+            updated_activity = get_hk.save()                  
+            serializer = HKActivitySerializer(updated_activity, many=False)                
+            activity_info['task_id']=task_id
+            activity_info['activity'] =serializer.data    
+            return Response(activity_info)
+        else:
+            return Response("Incorrect task_type, please select a correct task_type")     
+    else :
+        return Response("Error")  
                 #break
-            if task_type == "MH":
-                task_id = task_id                
-                update_mh = ManholeActivity.objects.get(task_id=task_id)
-                update_mh.status=request.data['status'] 
-                update_mh.completed_on=request.data['completed_on'] 
-                updated_activity = update_mh.save()
-                serializer = ManholeActivitySerializer(updated_activity, many=False)                
-                activity_result={}
-                activity_result['Manhole'] = serializer.data
-                activity_result['isSuccessful']=True 
-                activity_result['user'] =username
-                activity_result['userRole'] ="Admin"
-                activity_result['message'] ="Success"                          
-                return Response(activity_result)
-                #break
-            if task_type == "RR":
-                task_id = task_id                
-                update_rr = RoadRestorationActivity.objects.get(task_id=task_id)
-                update_rr.status=request.data['status'] 
-                update_rr.completed_on=request.data['completed_on'] 
-                updated_activity = update_rr.save()
-                serializer = RoadRestorationActivitySerializer(updated_activity, many=False)                
-                activity_result={}
-                activity_result['RR'] = serializer.data
-                activity_result['isSuccessful']=True 
-                activity_result['user'] =username
-                activity_result['userRole'] ="Admin"
-                activity_result['message'] ="Success"                          
-                return Response(activity_result)
-                #break
-            if task_type == "HSC":
-                task_id = task_id                
-                update_hsc = HSCActivity.objects.get(task_id=task_id)
-                update_hsc.status=request.data['status'] 
-                update_hsc.completed_on=request.data['completed_on'] 
-                updated_activity = update_pipe.save()
-                serializer = HSCActivitySerializer(updated_activity, many=False)                
-                activity_result={}
-                activity_result['HSC'] = serializer.data
-                activity_result['isSuccessful']=True 
-                activity_result['user'] =username
-                activity_result['userRole'] ="Admin"
-                activity_result['message'] ="Success"                          
-                return Response(activity_result)
-                #break
-            if task_type == "HK":
-                task_id = task_id,                                
-                update_hk = HSCActivity.objects.get(task_id=task_id)
-                update_hk.status=request.data['status'] 
-                update_hk.completed_on=request.data['completed_on'] 
-                updated_activity = update_hk.save()
-                serializer = HSCActivitySerializer(updated_activity, many=False)                
-                activity_result={}
-                activity_result['HSC'] = serializer.data
-                activity_result['isSuccessful']=True 
-                activity_result['user'] =username
-                activity_result['userRole'] ="Admin"
-                activity_result['message'] ="Success"                          
-                return Response(activity_result)
-                #break
-            report_restult['report_activity'] = serializer.data            
-            report_restult['isSuccessful']=True 
-            report_restult['user'] = username
-            report_restult['userRole'] ="Admin"
-            report_restult['message'] ="Success"                          
-        return Response(report_restult)
+                                    
 ## Fetch Task based on Id, Fetch tasks assigned to a user, Fetch tasks reported by a user.
 # fetch all the tasks defined in a plan.
 @api_view(["POST"])
 def fetch_plan_tasks(request):
     if request.method=='POST':
+        dat ={}
         username = request.data['username']
-        user = User.objects.get(username=username)                
-        plan_id= request.data['plan_id'] 
-        project_id = request.data['project_id'] 
-        organization_id = request.data['organization_id'] 
-        tasks = Task.objects.filter(task_project_id=project_id, task_organization_id = organization_id , task_plan_id = plan_id)        
-        tasksinfo={}
-        tasks=[]
+        user = User.objects.get(username=username)
+        user_id = user.user_id
+        plan_id = request.data['plan_id']         
+        organization_name = request.data['organization_name']
+        organization = Organization.objects.get(organization_name=organization_name)
+        organization_id = organization.organization_id                        
+        project_name = request.data['project_name']
+        project = Project.objects.get(project_name=project_name)
+        project_id = project.project_id
+        tasks = Task.objects.filter(task_project_id=project_id, task_organization_id = organization_id, task_plan_id=plan_id )
+        tasks_list=[]
         for task in tasks:
-            task_info={}           
-            #u = task
+            task_info={}                       
             task_info['task_id'] = task.task_id
             task_info['task_name'] =task.task_name
-            task_info['store_location'] = task.store_location 
             task_info['task_startnode'] = task.task_startnode
             task_info['task_endnode'] =task.task_endnode
             task_info['task_type'] =task.task_type
-            tasks.append(taskinfo)            
-        dat['tasksinfo'] =  tasks                            
+            tasks_list.append(task_info)            
+        dat['taskinfo'] =  tasks_list
         dat['isSuccessful']=True 
         dat['user'] =request.data['username']      
         dat['message'] ="Success"                                           
@@ -992,69 +945,60 @@ def fetch_plan_tasks(request):
 def fetch_task_activities(request):
     if request.method=='POST':
         username = request.data['username']
-        user = User.objects.get(username=username)                
-        plan_id= request.data['plan_id'] 
-        project_id = request.data['project_id'] 
-        organization_id = request.data['organization_id'] 
+        user = User.objects.get(username=username)     
+        plan_id = request.data['plan_id']         
+        organization_name = request.data['organization_name']
+        organization = Organization.objects.get(organization_name=organization_name)
+        organization_id = organization.organization_id                        
+        project_name = request.data['project_name']
+        project = Project.objects.get(project_name=project_name)
+        project_id = project.project_id
         task_id = request.data['task_id']         
-        task_startnode = request.data['task_startnode']                 
-        task_endnode = request.data['task_endnode']                         
+                       
         tasks = Task.objects.filter(task_project_id=project_id, task_organization_id = organization_id ,
-         task_plan_id = plan_id, task_startnode =task_startnode, task_endnode=task_endnode )        
-        tasksinfo={}
+         task_plan_id = plan_id, task_id =task_id )        
+        task_info={}
         task_activities=[]        
         for task in tasks:
             activity_info={}           
             #u = task
             task_id =task.task_id
             task_type = task.task_type
-            if task_type == "CC":
-                get_cc = CCBreakingActivity.objects.get(task_id=task_id)
-                serializer = CCBreakingActivitySerializer(get_cc, many=False)                
-                activity_info['task_id']=task_id
-                activity_info['task_type'] = task_type
-                activity_info['activity'] =serializer.data    
-                task_activities.append(activity_info)            
-            if task_type == "Pipe":
-                task_id = task_id                
-                get_pipe = PipeLineActivity.objects.get(task_id=task_id)
-                serializer = PipeLineActivitySerializer(get_pipe, many=False)                
-                activity_info['task_id']=task_id
-                activity_info['task_type'] = task_type
-                activity_info['activity'] =serializer.data    
-                task_activities.append(activity_info)            
+            get_cc = CCBreakingActivity.objects.get(cc_task_id=task_id)
+            serializer = CCBreakingActivitySerializer(get_cc, many=False)                
+            activity_info['task_id']=task_id
+            activity_info['task_type'] = task_type
+            activity_info['activity'] =serializer.data    
+            task_activities.append(activity_info)                        
+            get_pipe = PipeLineActivity.objects.get(pipe_task_id=task_id)
+            serializer = PipeLineActivitySerializer(get_pipe, many=False)                
+            activity_info={}   
+            activity_info['task_type'] = task_type
+            activity_info['activity'] =serializer.data    
+            task_activities.append(activity_info)            
+            get_mh = ManholeActivity.objects.get(mh_task_id=task_id)
+            serializer = ManholeActivitySerializer(get_mh, many=False)                
+               
+            activity_info={}                   
+            activity_info['activity'] =serializer.data    
+            task_activities.append(activity_info)            
 
-            if task_type == "MH":
-                get_mh = ManholeActivity.objects.get(task_id=task_id)
-                serializer = ManholeActivitySerializer(get_mh, many=False)                
-                activity_info['task_id']=task_id
-                activity_info['task_type'] = task_type
-                activity_info['activity'] =serializer.data    
-                task_activities.append(activity_info)            
+            get_rr = RoadRestorationActivity.objects.get(rr_task_id=task_id)
+            serializer = RoadRestorationActivitySerializer(get_rr, many=False)                
+            activity_info={}   
+            activity_info['activity'] =serializer.data    
+            task_activities.append(activity_info)            
+            get_hsc = HSCActivity.objects.get(hsc_task_id=task_id)
+            serializer = HSCActivitySerializer(get_hsc, many=False)                            
+            activity_info={}   
+            activity_info['activity'] =serializer.data                
+            task_activities.append(activity_info)            
 
-            if task_type == "RR":
-                get_rr = RoadRestorationActivity.objects.get(task_id=task_id)
-                serializer = RoadRestorationActivitySerializer(get_rr, many=False)                
-                activity_info['task_id']=task_id
-                activity_info['task_type'] = task_type
-                activity_info['activity'] =serializer.data    
-                task_activities.append(activity_info)            
-
-            if task_type == "HSC":
-                get_hsc = HSCActivity.objects.get(task_id=task_id)
-                serializer = HSCActivitySerializer(get_hsc, many=False)                
-                activity_info['task_id']=task_id
-                activity_info['task_type'] = task_type
-                activity_info['activity'] =serializer.data    
-                task_activities.append(activity_info)            
-
-            if task_type == "HK":
-                get_hk = HSCActivity.objects.get(task_id=task_id)
-                serializer = HSCActivitySerializer(get_hk, many=False)                
-                activity_info['task_id']=task_id
-                activity_info['task_type'] = task_type
-                activity_info['activity'] =serializer.data    
-                task_activities.append(activity_info)            
+            get_hk = HouseKeepingActivity.objects.get(hk_task_id=task_id)
+            serializer = HouseKeepingActivitySerializer(get_hk, many=False)                
+            activity_info={}   
+            activity_info['activity'] =serializer.data    
+            task_activities.append(activity_info)            
         task_info['task_activities'] = task_activities
         task_info['issuccessful'] = True
         task_info['user'] =request.data['username']      
@@ -1065,64 +1009,64 @@ def fetch_task_activities(request):
 def fetch_task_activity(request):    
     if request.method=='POST':
         username = request.data['username']
-        user = User.objects.get(username=username)                
-        plan_id= request.data['plan_id'] 
-        project_id = request.data['project_id'] 
-        organization_id = request.data['organization_id'] 
-        task_id = request.data['task_id']  
-        activity_id = request.data['activity_id']         
-        task_startnode = request.data['task_startnode']                 
-        task_endnode = request.data['task_endnode']                         
-        tasks = Task.objects.filter(task_project_id=project_id, task_organization_id = organization_id ,
-         task_plan_id = plan_id, task_id =task_id)
+        user = User.objects.get(username=username)     
+        plan_id = request.data['plan_id']         
+        organization_name = request.data['organization_name']
+        organization = Organization.objects.get(organization_name=organization_name)
+        organization_id = organization.organization_id                        
+        project_name = request.data['project_name']
+        project = Project.objects.get(project_name=project_name)
+        project_id = project.project_id
+        task_id = request.data['task_id']         
+        activity_id = request.data['activity_name']                               
+#        tasks = Task.objects.filter(task_project_id=project_id, task_organization_id = organization_id ,
+#        task_plan_id = plan_id, task_id =task_id)
+# verify the task Id and fetch activity
         activity_info={}
-        if task_type == "CC":
-            get_cc = CCBreakingActivity.objects.get(activity_id=activity_id)
-            serializer = CCBreakingActivitySerializer(get_cc, many=False)                
+        get_cc = CCBreakingActivity.objects.filter(ccbreaking_activity_name=activity_id)
+
+        if get_cc.exists():            
+            serializer = CCBreakingActivitySerializer(get_cc[0], many=False)                
             activity_info['task_id']=task_id
-            activity_info['task_type'] = task_type
+
             activity_info['activity'] =serializer.data    
             return Response(activity_info)
-            #break
-        if task_type == "Pipe":
-            task_id = task_id                
-            get_pipe = PipeLineActivity.objects.get(activity_id=activity_id)
-            serializer = PipeLineActivitySerializer(get_pipe, many=False)                
+        get_pipe = PipeLineActivity.objects.filter(pipeline_activity_name=activity_id)
+        if get_pipe.exists():
+            serializer = PipeLineActivitySerializer(get_pipe[0], many=False)                
+            activity_info['task_id']=task_id
+            activity_info['activity'] =serializer.data    
+            return Response(activity_info)
+        get_mh = ManholeActivity.objects.filter(manhole_activity_name=activity_id)
+        if get_mh.exists():
+            serializer = ManholeActivitySerializer(get_mh[0], many=False)                
             activity_info['task_id']=task_id
             activity_info['task_type'] = task_type
             activity_info['activity'] =serializer.data    
             return Response(activity_info)
             #break
 
-        if task_type == "MH":
-            get_mh = ManholeActivity.objects.get(activity_id=activity_id)
-            serializer = ManholeActivitySerializer(get_mh, many=False)                
+        get_rr = RoadRestorationActivity.objects.filter(rr_activity_name=activity_id)
+        if get_rr.exists():
+            serializer = RoadRestorationActivitySerializer(get_rr[0], many=False)                
+            activity_info['task_id']=task_id
+            activity_info['task_type'] = task_type
+            activity_info['activity'] =serializer.data    
+            return Response(activity_info)
+            #break
+        
+        get_hsc = HSCActivity.objects.filter(hsc_activity_name=activity_id)
+        if get_hsc.exists():        
+            serializer = HSCActivitySerializer(get_hsc[0], many=False)                
             activity_info['task_id']=task_id
             activity_info['task_type'] = task_type
             activity_info['activity'] =serializer.data    
             return Response(activity_info)
             #break
 
-        if task_type == "RR":
-            get_rr = RoadRestorationActivity.objects.get(activity_id=activity_id)
-            serializer = RoadRestorationActivitySerializer(get_rr, many=False)                
-            activity_info['task_id']=task_id
-            activity_info['task_type'] = task_type
-            activity_info['activity'] =serializer.data    
-            return Response(activity_info)
-            #break
-
-        if task_type == "HSC":
-            get_hsc = HSCActivity.objects.get(activity_id=activity_id)
-            serializer = HSCActivitySerializer(get_hsc, many=False)                
-            activity_info['task_id']=task_id
-            activity_info['task_type'] = task_type
-            activity_info['activity'] =serializer.data    
-            return Response(activity_info)
-            #break
-        if task_type == "HK":
-            get_hk = HKActivity.objects.get(activity_id=activity_id)
-            serializer = HKActivitySerializer(get_hk, many=False)                
+        get_hk = HKActivity.objects.filter(hk_activity_name=activity_id)
+        if get_hk.exists():
+            serializer = HKActivitySerializer(get_hk[0], many=False)                
             activity_info['task_id']=task_id
             activity_info['task_type'] = task_type
             activity_info['activity'] =serializer.data    
@@ -1141,105 +1085,77 @@ def update_task_activity(request):
         username = request.data['username']
         user = User.objects.get(username=username)                
         plan_id= request.data['plan_id'] 
-        project_id = request.data['project_id'] 
-        organization_id = request.data['organization_id'] 
+        organization_name = request.data['organization_name']
+        organization = Organization.objects.get(organization_name=organization_name)
+        organization_id = organization.organization_id                        
+        project_name = request.data['project_name']
+        project = Project.objects.get(project_name=project_name)
+        project_id = project.project_id
         task_id = request.data['task_id']  
-        activity_id = request.data['activity_id']         
-        task_startnode = request.data['task_startnode']                 
-        task_endnode = request.data['task_endnode']                         
-        tasks = Task.objects.filter(task_project_id=project_id, task_organization_id = organization_id ,
-         task_plan_id = plan_id, task_id =task_id)
-        if tasks.count()>0:             
-            if task_type == "CC":
-                task_id = task_id
-                update_cc = CCBreakingActivity.objects.get(task_id=task_id)
-                update_cc.status=request.data['status'] 
-                update_cc.completed_on=request.data['completed_on'] 
-                updated_activity = update_cc.save()
-                serializer = CCBreakingActivitySerializer(updated_activity, many=False)                
-                activity_result={}
-                activity_result['plan'] = serializer.data
-                activity_result['isSuccessful']=True 
-                activity_result['user'] =username
-                activity_result['userRole'] ="Admin"
-                activity_result['message'] ="Success"                          
-                return Response(activity_result)
-                #break
-                
-            if task_type == "Pipe":
-                task_id = task_id                
-                update_pipe = PipeLineActivity.objects.get(task_id=task_id)
-                update_pipe.status=request.data['status'] 
-                update_pipe.completed_on=request.data['completed_on'] 
-                updated_activity = update_pipe.save()
-                serializer = PipeLineActivitySerializer(updated_activity, many=False)                
-                activity_result={}
-                activity_result['pipe'] = serializer.data
-                activity_result['isSuccessful']=True 
-                activity_result['user'] =username
-                activity_result['userRole'] ="Admin"
-                activity_result['message'] ="Success"                          
-                return Response(activity_result)
-                #break
-            if task_type == "MH":
-                task_id = task_id                
-                update_mh = ManholeActivity.objects.get(task_id=task_id)
-                update_mh.status=request.data['status'] 
-                update_mh.completed_on=request.data['completed_on'] 
-                updated_activity = update_mh.save()
-                serializer = ManholeActivitySerializer(updated_activity, many=False)                
-                activity_result={}
-                activity_result['Manhole'] = serializer.data
-                activity_result['isSuccessful']=True 
-                activity_result['user'] =username
-                activity_result['userRole'] ="Admin"
-                activity_result['message'] ="Success"                          
-                return Response(activity_result)
-                #break
-            if task_type == "RR":
-                task_id = task_id                
-                update_rr = RoadRestorationActivity.objects.get(task_id=task_id)
-                update_rr.status=request.data['status'] 
-                update_rr.completed_on=request.data['completed_on'] 
-                updated_activity = update_rr.save()
-                serializer = RoadRestorationActivitySerializer(updated_activity, many=False)                
-                activity_result={}
-                activity_result['RR'] = serializer.data
-                activity_result['isSuccessful']=True 
-                activity_result['user'] =username
-                activity_result['userRole'] ="Admin"
-                activity_result['message'] ="Success"                          
-                return Response(activity_result)
-                #break
-            if task_type == "HSC":
-                task_id = task_id                
-                update_hsc = HSCActivity.objects.get(task_id=task_id)
-                update_hsc.status=request.data['status'] 
-                update_hsc.completed_on=request.data['completed_on'] 
-                updated_activity = update_pipe.save()
-                serializer = HSCActivitySerializer(updated_activity, many=False)                
-                activity_result={}
-                activity_result['HSC'] = serializer.data
-                activity_result['isSuccessful']=True 
-                activity_result['user'] =username
-                activity_result['userRole'] ="Admin"
-                activity_result['message'] ="Success"                          
-                return Response(activity_result)
-                #break
-            if task_type == "HK":
-                task_id = task_id,                                
-                update_hk = HSCActivity.objects.get(task_id=task_id)
-                update_hk.status=request.data['status'] 
-                update_hk.completed_on=request.data['completed_on'] 
-                updated_activity = update_hk.save()
-                serializer = HSCActivitySerializer(updated_activity, many=False)                
-                activity_result={}
-                activity_result['HSC'] = serializer.data
-                activity_result['isSuccessful']=True 
-                activity_result['user'] =username
-                activity_result['userRole'] ="Admin"
-                activity_result['message'] ="Success"                          
-                return Response(activity_result)
-                #break
-    else:
-        return Response("Error")   
+        activity_id = request.data['activity_name']         
+        tasks = Task.objects.filter(task_id =task_id)
+        activity_info={}
+        get_cc = CCBreakingActivity.objects.filter(ccbreaking_activity_name=activity_id)
+        if get_cc.exists():
+            get_cc = CCBreakingActivity.objects.get(ccbreaking_activity_name=activity_id)
+            get_cc.status=request.data['status'] 
+            get_cc.completed_on=request.data['completed_on'] 
+            updated_activity = get_cc.save()
+            serializer = CCBreakingActivitySerializer(updated_activity, many=False)                
+            activity_info['task_id']=task_id
+            activity_info['activity'] =serializer.data    
+            return Response(activity_info)
+        get_pipe = PipeLineActivity.objects.filter(pipeline_activity_name=activity_id)
+        if get_pipe.exists():
+            get_pipe = PipeLineActivity.objects.get(pipeline_activity_name=activity_id)            
+            get_pipe.status=request.data['status']
+            get_pipe.completed_on=request.data['completed_on']
+            updated_activity = get_pipe.save()
+            serializer = PipeLineActivitySerializer(get_pipe, many=False)                
+            activity_info['task_id']=task_id
+            activity_info['activity'] =serializer.data    
+            return Response(activity_info)
+        get_mh = ManholeActivity.objects.filter(manhole_activity_name=activity_id)
+        if get_mh.exists():
+            get_mh = ManholeActivity.objects.get(manhole_activity_name=activity_id)
+            get_mh.status=request.data['status']
+            get_mh.completed_on=request.data['completed_on']
+            updated_activity = get_mh.save()            
+            serializer = ManholeActivitySerializer(updated_activity, many=False)                
+            activity_info['task_id']=task_id
+            activity_info['activity'] =serializer.data    
+            return Response(activity_info)
+        get_rr = RoadRestorationActivity.objects.filter(rr_activity_name=activity_id)
+        if get_rr.exists():
+            get_rr = RoadRestorationActivity.objects.get(rr_activity_name=activity_id)
+            get_rr.status=request.data['status']
+            get_rr.completed_on=request.data['completed_on']
+            updated_activity = get_rr.save()                        
+            serializer = RoadRestorationActivitySerializer(updated_activity, many=False)                
+            activity_info['task_id']=task_id
+            activity_info['activity'] =serializer.data    
+            return Response(activity_info)
+        get_hsc = HSCActivity.objects.filter(hsc_activity_name=activity_id)
+        if get_hsc.exists():        
+            get_hsc = HSCActivity.objects.get(hsc_activity_name=activity_id)            
+            get_hsc.status=request.data['status']
+            get_hsc.completed_on=request.data['completed_on']
+            updated_activity = get_hsc.save()                  
+            serializer = HSCActivitySerializer(updated_activity, many=False)                
+            activity_info['task_id']=task_id
+            activity_info['activity'] =serializer.data    
+            return Response(activity_info)
+        get_hk = HKActivity.objects.filter(hk_activity_name=activity_id)
+        if get_hk.exists():
+            get_hk = HKActivity.objects.get(hk_activity_name=activity_id)
+            get_hk.status=request.data['status']
+            get_hk.completed_on=request.data['completed_on']
+            updated_activity = get_hk.save()                  
+            serializer = HKActivitySerializer(updated_activity, many=False)                
+            activity_info['task_id']=task_id
+            activity_info['activity'] =serializer.data    
+            return Response(activity_info)
+        else:
+            return Response("Incorrect task_type, please select a correct task_type")     
+    else :
+        return Response("Error")  
